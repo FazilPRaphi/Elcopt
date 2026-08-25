@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elcopt | Elevate Your Visual Assets</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+</head>
+<body>
+    <main class="hero">
+        <div class="brand">Elcopt</div>
+        
+        <h1>Elevate Your Visual Assets</h1>
+        
+        <p>
+            The fast, secure, and reliable way to store,
+            manage, and deliver your images.
+        </p>
+        
+        <div class="actions">
+            <a href="{{ url_for('register') }}" class="btn-primary">Get Started</a>
+            <a href="{{ url_for('login') }}" class="btn-secondary">View Demo</a>
+        </div>
+    </main>
+
+    <footer>Elcopt</footer>
+</body>
+</html>

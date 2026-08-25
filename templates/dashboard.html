@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard | Elcopt{% endblock %}
+
+{% block content %}
+
+<div class="container" style="max-width: 900px; padding: 40px 24px;">
+
+    <!-- Minimal Header -->
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 56px;">
+        <h1 style="font-size: 28px; font-weight: 700; color: #111111; margin: 0; letter-spacing: -0.5px;">
+            Hi {{ username }}, welcome back
+        </h1>
+        <a href="{{ url_for('logout') }}"
+            style="display: inline-flex; align-items: center; justify-content: center; padding: 10px 24px; background-color: #FFFFFF; color: #00C5A8; border: 2px solid #00C5A8; border-radius: 8px; font-weight: 600; text-decoration: none; font-size: 14px; transition: all 0.2s ease;"
+            onmouseover="this.style.backgroundColor='#00C5A8'; this.style.color='#FFFFFF';"
+            onmouseout="this.style.backgroundColor='#FFFFFF'; this.style.color='#00C5A8';">
+            Sign Out
+        </a>
+    </div>
+
+    <!-- Upload Section -->
+    <div
+        style="background-color: #FFFFFF; border: 1px solid #E5E5E5; border-radius: 20px; padding: 48px 32px; margin-bottom: 56px; text-align: center;">
+        <h2 style="font-size: 22px; font-weight: 700; color: #111111; margin-bottom: 8px; letter-spacing: -0.5px;">
+            Upload to your vault</h2>
+        <p style="color: #555555; font-size: 15px; margin-bottom: 32px;">Supported formats: JPG, JPEG, PNG, WEBP</p>
+
+        <form action="{{ url_for('upload') }}" method="POST" enctype="multipart/form-data"
+            style="display: flex; flex-direction: column; align-items: center;">
+
+            <label for="image"
+                style="cursor: pointer; display: flex; align-items: center; justify-content: center; width: 100%; max-width: 500px; height: 140px; background-color: #FFFFFF; border: 2px dashed #81D4F2; border-radius: 16px; margin-bottom: 24px; transition: all 0.2s ease;"
+                onmouseover="this.style.borderColor='#00C5A8'; this.style.backgroundColor='#F9F9F9';"
+                onmouseout="this.style.borderColor='#81D4F2'; this.style.backgroundColor='#FFFFFF';">
+                <span id="selected-file" style="color: #555555; font-weight: 500; font-size: 16px;">
+                    <i class="fa-solid fa-cloud-arrow-up" style="margin-right: 8px; color: #81D4F2;"></i> Click to
+                    choose an image
+                </span>
+            </label>
+            <input type="file" id="image" name="image" accept="image/*" required style="display: none;">
+
+            <button type="submit"
+                style="background-color: #00C5A8; color: #FFFFFF; border: none; padding: 14px 40px; border-radius: 8px; font-weight: 600; font-size: 16px; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 12px rgba(0, 197, 168, 0.2);"
+                onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 16px rgba(0, 197, 168, 0.3)';"
+                onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(0, 197, 168, 0.2)';">
+                Upload Image
+            </button>
+        </form>
+    </div>
+
+    <!-- Image Gallery -->
+    <div>
+        <h2 style="font-size: 22px; font-weight: 700; color: #111111; margin-bottom: 24px; letter-spacing: -0.5px;">Your
+            Vault</h2>
+
+        {% if images %}
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 24px;">
+            {% for img in images %}
+            <div style="background-color: #FFFFFF; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06); display: flex; flex-direction: column; transition: transform 0.2s ease;"
+                onmouseover="this.style.transform='translateY(-4px)';"
+                onmouseout="this.style.transform='translateY(0)';">
+                <a href="{{ img.url }}" target="_blank" rel="noopener" style="display: block;">
+                    <img src="{{ img.url }}" alt="{{ img.original_filename }}" loading="lazy"
+                        style="width: 100%; height: 180px; object-fit: cover; display: block;">
+                </a>
+
+                <div style="padding: 20px; display: flex; flex-direction: column; flex: 1;">
+                    <p style="font-size: 15px; font-weight: 600; color: #111111; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 6px;"
+                        title="{{ img.original_filename }}">
+                        {{ img.original_filename }}
+                    </p>
+
+                    <p style="font-size: 13px; color: #999999; margin-bottom: 20px;">
+                        {% if img.created_at %}
+                        Uploaded: {{ img.created_at.strftime('%b %d, %Y') if img.created_at.strftime else
+                        (img.created_at|string)[:10] }}
+                        {% else %}
+                        Uploaded recently
+                        {% endif %}
+                    </p>
+
+                    <div style="margin-top: auto;">
+                        <!-- Inert delete button as backend logic isn't implemented -->
+                        <form action="#" method="POST"
+                            onsubmit="event.preventDefault(); alert('Delete functionality is not implemented yet.');">
+                            <button type="submit"
+                                style="width: 100%; background-color: #FFFFFF; border: 1px solid #E5E5E5; color: #FF4D4D; padding: 10px 0; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s ease;"
+                                onmouseover="this.style.backgroundColor='#FFF0F0'; this.style.borderColor='#FF4D4D';"
+                                onmouseout="this.style.backgroundColor='#FFFFFF'; this.style.borderColor='#E5E5E5';">
+                                Delete
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div
+            style="background-color: #F9F9F9; border-radius: 16px; padding: 60px 20px; text-align: center; border: 1px solid #E5E5E5;">
+            <p style="font-size: 16px; color: #555555; font-weight: 500;">Your vault is empty. Upload your first image
+                to see it here.</p>
+        </div>
+        {% endif %}
+    </div>
+
+</div>
+
+<script>
+    const imageInput = document.getElementById("image");
+    const selectedFile = document.getElementById("selected-file");
+    const dropZone = selectedFile.parentElement;
+
+    imageInput.addEventListener("change", function () {
+        if (this.files.length > 0) {
+            selectedFile.innerHTML = '<i class="fa-solid fa-check" style="margin-right: 8px; color: #00C5A8;"></i><span style="color: #111111; font-weight: 600;">' + this.files[0].name + '</span>';
+            dropZone.style.borderColor = '#00C5A8';
+        } else {
+            selectedFile.innerHTML = '<i class="fa-solid fa-cloud-arrow-up" style="margin-right: 8px; color: #81D4F2;"></i> Click to choose an image';
+            dropZone.style.borderColor = '#81D4F2';
+        }
+    });
+</script>
+
+{% endblock %}

@@ -1,0 +1,131 @@
+/* Elcopt Minimal Home Page Design */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    height: 100%;
+    min-height: 100vh;
+    overflow: hidden;
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    background-color: #FFFFFF;
+    color: #111111;
+    display: flex;
+    flex-direction: column;
+}
+
+::selection {
+    background-color: #FCFCD4;
+    color: #111111;
+}
+
+.hero {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0 24px;
+    text-align: center;
+    width: 100%;
+}
+
+.brand {
+    font-size: 14px;
+    font-weight: 700;
+    color: #111111;
+    margin-bottom: 32px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+h1 {
+    font-size: 64px;
+    font-weight: 700;
+    color: #111111;
+    line-height: 1.1;
+    margin-bottom: 24px;
+    letter-spacing: -1.5px;
+}
+
+p {
+    font-size: 20px;
+    font-weight: 400;
+    color: #555555;
+    line-height: 1.5;
+    max-width: 600px;
+    margin-bottom: 48px;
+}
+
+.actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.actions a {
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 14px 32px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-primary {
+    background-color: #00C5A8;
+    color: #FFFFFF;
+    border: 1px solid #00C5A8;
+}
+
+.btn-primary:hover {
+    background-color: #00B096;
+    border-color: #00B096;
+    transform: translateY(-1px);
+}
+
+.btn-secondary {
+    background-color: #FFFFFF;
+    color: #111111;
+    border: 1px solid #DADADA;
+}
+
+.btn-secondary:hover {
+    border-color: #81D4F2;
+    background-color: rgba(129, 212, 242, 0.05);
+}
+
+footer {
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    color: #CCCCCC;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding-bottom: 8px;
+}
+
+@media (max-width: 768px) {
+    h1 {
+        font-size: 40px;
+        letter-spacing: -1px;
+    }
+    p {
+        font-size: 17px;
+    }
+    .actions {
+        flex-direction: column;
+        width: 100%;
+        max-width: 280px;
+    }
+    .actions a {
+        width: 100%;
+    }
+}
