@@ -1,25 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Elcopt - Your premium cloud image storage and management platform. Fast, secure, and effortless visual asset organization.">
+    <meta name="description"
+        content="Elcopt - Your premium cloud image storage and management platform. Fast, secure, and effortless visual asset organization.">
     <title>{% block title %}Elcopt | Image Storage & Management{% endblock %}</title>
-    
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <!-- Main Style CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    
+
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
 </head>
+
 <body>
     <div class="app-wrapper">
         <!-- Navigation Header -->
@@ -28,39 +32,40 @@
                 <a href="{{ url_for('home') }}" class="nav-brand">
                     <span>Elcopt</span>
                 </a>
-                
+
                 <div class="nav-actions">
                     {% if session.get('user_id') %}
-                        
-                        <a href="{{ url_for('logout') }}" class="btn btn-primary btn-sm">
-                            Logout
-                        </a>
+
+                    <a href="{{ url_for('logout') }}" class="btn btn-primary btn-sm">
+                        Logout
+                    </a>
                     {% else %}
-                        <a href="{{ url_for('login') }}" class="btn btn-outline btn-sm">
-                            Login
-                        </a>
-                        <a href="{{ url_for('register') }}" class="btn btn-primary btn-sm">
-                            Get Started
-                        </a>
+                    <a href="{{ url_for('login') }}" class="btn btn-outline btn-sm">
+                        Login
+                    </a>
+                    <a href="{{ url_for('register') }}" class="btn btn-primary btn-sm">
+                        Get Started
+                    </a>
                     {% endif %}
                 </div>
             </div>
         </nav>
 
         <main>
-          
+
             {% with messages = get_flashed_messages(with_categories=true) %}
-                {% if messages %}
-                    <div class="container flash-messages-container">
-                        {% for category, message in messages %}
-                            <div class="alert alert-{{ category }}" role="alert">
-                                <i class="fa-solid {% if category == 'success' %}fa-circle-check{% elif category == 'danger' %}fa-circle-exclamation{% elif category == 'warning' %}fa-triangle-exclamation{% else %}fa-circle-info{% endif %}"></i>
-                                <span>{{ message }}</span>
-                                <button type="button" class="alert-close" onclick="this.parentElement.remove();">&times;</button>
-                            </div>
-                        {% endfor %}
-                    </div>
-                {% endif %}
+            {% if messages %}
+            <div class="container flash-messages-container">
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }}" role="alert">
+                    <i
+                        class="fa-solid {% if category == 'success' %}fa-circle-check{% elif category == 'danger' %}fa-circle-exclamation{% elif category == 'warning' %}fa-triangle-exclamation{% else %}fa-circle-info{% endif %}"></i>
+                    <span>{{ message }}</span>
+                    <button type="button" class="alert-close" onclick="this.parentElement.remove();">&times;</button>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
             {% endwith %}
 
             {% block content %}
@@ -77,4 +82,5 @@
         </footer>
     </div>
 </body>
+
 </html>
