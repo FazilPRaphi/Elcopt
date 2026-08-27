@@ -6,20 +6,15 @@
 
 <div class="container" style="max-width: 900px; padding: 40px 24px;">
 
-    <!-- Minimal Header -->
+  
     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 56px;">
         <h1 style="font-size: 28px; font-weight: 700; color: #111111; margin: 0; letter-spacing: -0.5px;">
             Hi {{ username }}, welcome back
         </h1>
-        <a href="{{ url_for('logout') }}"
-            style="display: inline-flex; align-items: center; justify-content: center; padding: 10px 24px; background-color: #FFFFFF; color: #00C5A8; border: 2px solid #00C5A8; border-radius: 8px; font-weight: 600; text-decoration: none; font-size: 14px; transition: all 0.2s ease;"
-            onmouseover="this.style.backgroundColor='#00C5A8'; this.style.color='#FFFFFF';"
-            onmouseout="this.style.backgroundColor='#FFFFFF'; this.style.color='#00C5A8';">
-            Sign Out
-        </a>
+        
     </div>
 
-    <!-- Upload Section -->
+   
     <div
         style="background-color: #FFFFFF; border: 1px solid #E5E5E5; border-radius: 20px; padding: 48px 32px; margin-bottom: 56px; text-align: center;">
         <h2 style="font-size: 22px; font-weight: 700; color: #111111; margin-bottom: 8px; letter-spacing: -0.5px;">
@@ -49,7 +44,7 @@
         </form>
     </div>
 
-    <!-- Image Gallery -->
+    
     <div>
         <h2 style="font-size: 22px; font-weight: 700; color: #111111; margin-bottom: 24px; letter-spacing: -0.5px;">Your
             Vault</h2>
@@ -81,9 +76,8 @@
                     </p>
 
                     <div style="margin-top: auto;">
-                        <!-- Inert delete button as backend logic isn't implemented -->
-                        <form action="#" method="POST"
-                            onsubmit="event.preventDefault(); alert('Delete functionality is not implemented yet.');">
+                        
+                        <form action="{{ url_for('delete_image', image_id=img.doc_id) }}" method="POST">
                             <button type="submit"
                                 style="width: 100%; background-color: #FFFFFF; border: 1px solid #E5E5E5; color: #FF4D4D; padding: 10px 0; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s ease;"
                                 onmouseover="this.style.backgroundColor='#FFF0F0'; this.style.borderColor='#FF4D4D';"

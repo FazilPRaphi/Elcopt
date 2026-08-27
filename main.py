@@ -494,9 +494,6 @@ def login():
         )
 
     return render_template("login.html")
-# --------------------------------------------------
-# DASHBOARD
-# --------------------------------------------------
 
 @app.route("/dashboard")
 @login_required
@@ -529,9 +526,7 @@ def dashboard():
             "warning"
         )
 
-    # ------------------------------------------
-    # Load user's uploaded images
-    # ------------------------------------------
+   
 
     images = []
 
@@ -652,9 +647,46 @@ def upload():
         )
 
     return redirect(url_for("dashboard"))
-# --------------------------------------------------
-# LOGOUT
-# --------------------------------------------------
+@app.route("/delete_image/<image_id>", methods=["POST"])
+@login_required
+def delete_image(image_id):
+    if user_id := session.get("user_id"):
+        try:
+        
+            image_doc = (
+                db.collection("users")
+                .document(user_id)
+                .collection("images")
+                .document(image_id)
+                .get()
+            )
+
+            if not image_doc.exists:
+                flash("Image not found.", "danger") 
+                return redirect(url_for("dashboard"))
+
+            image_data = image_doc.to_dict()
+            public_id = image_data.get("public_id")
+
+            # Delete from Cloudinary
+            cloudinary.uploader.destroy(public_id)
+
+            # Delete from Firestore
+            (
+                db.collection("users")
+                .document(user_id)
+                .collection("images")
+                .document(image_id)
+                .delete()
+            )
+
+            flash("Image deleted successfully.", "success")
+
+        except Exception as e:
+            app.logger.error(f"Image deletion failed: {e}")
+            flash("Image deletion failed.", "danger")
+
+    return redirect(url_for("dashboard"))
 
 @app.route("/logout")
 def logout():

@@ -31,9 +31,7 @@
                 
                 <div class="nav-actions">
                     {% if session.get('user_id') %}
-                        <a href="{{ url_for('dashboard') }}" class="btn btn-outline btn-sm">
-                            Dashboard
-                        </a>
+                        
                         <a href="{{ url_for('logout') }}" class="btn btn-primary btn-sm">
                             Logout
                         </a>
