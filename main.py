@@ -29,9 +29,7 @@ cloudinary.config(
     api_secret=os.environ.get("CLOUDINARY_API_SECRET")
 )
 
-# --------------------------------------------------
-# Firebase initialization
-# --------------------------------------------------
+
 
 cred = credentials.Certificate("serviceAccountKey.json")
 
@@ -41,34 +39,25 @@ if not firebase_admin._apps:
 db = firestore.client()
 
 
-# --------------------------------------------------
-# Flask initialization
-# --------------------------------------------------
 
 app = Flask(__name__)
 
-# NOTE: If FLASK_SECRET_KEY isn't set in your .env, sessions are signed
-# with a public, guessable key. Set a real random value in .env, e.g.:
-#   FLASK_SECRET_KEY=python -c "import secrets; print(secrets.token_hex(32))"
 app.secret_key = os.environ.get(
     "FLASK_SECRET_KEY",
     "elcopt_super_secret_key_2026"
 )
 
 
-# --------------------------------------------------
-# Firebase Web API Key
-# --------------------------------------------------
+
 
 FIREBASE_WEB_API_KEY = os.environ.get(
     "FIREBASE_WEB_API_KEY",
     ""
 )
 
+PORT = int(os.environ.get("PORT", "5000"))
 
-# --------------------------------------------------
-# Login protection
-# --------------------------------------------------
+
 
 def login_required(f):
 
@@ -93,9 +82,6 @@ def login_required(f):
     return decorated_function
 
 
-# --------------------------------------------------
-# Home
-# --------------------------------------------------
 
 @app.route("/")
 def home():
@@ -103,14 +89,10 @@ def home():
     return render_template("home.html")
 
 
-# --------------------------------------------------
-# REGISTER
-# --------------------------------------------------
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
 
-    # Already logged in
     if "user_id" in session:
         return redirect(url_for("dashboard"))
 
@@ -131,9 +113,7 @@ def register():
             ""
         )
 
-        # ------------------------------------------
-        # Basic validation
-        # ------------------------------------------
+        
 
         if not username or not email or not password:
 
@@ -157,10 +137,7 @@ def register():
                 "register.html"
             )
 
-        # ------------------------------------------
-        # Check username in Firestore
-        # ------------------------------------------
-
+       
         try:
 
             existing_users = (
@@ -200,9 +177,6 @@ def register():
                 "register.html"
             )
 
-        # ------------------------------------------
-        # Create Firebase Authentication account
-        # ------------------------------------------
 
         try:
 
@@ -238,9 +212,7 @@ def register():
                 "register.html"
             )
 
-        # ------------------------------------------
-        # Create Firestore user document
-        # ------------------------------------------
+       
 
         try:
 
@@ -264,9 +236,7 @@ def register():
                 f"Firestore user creation failed: {e}"
             )
 
-            # IMPORTANT:
-            # Authentication account was created,
-            # but Firestore profile failed.
+           
 
             flash(
                 "Account created, but profile setup failed.",
@@ -291,9 +261,7 @@ def register():
     )
 
 
-# --------------------------------------------------
-# LOGIN
-# --------------------------------------------------
+
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -309,9 +277,7 @@ def login():
         if not identifier or not password:
             raise ValueError("Username/email and password are required.")
 
-        # ------------------------------------------
-        # Find email
-        # ------------------------------------------
+       
 
         target_email = identifier.lower()
 
@@ -347,18 +313,14 @@ def login():
         print(f"Identifier : {identifier}")
         print(f"Target email: {target_email}")
 
-        # ------------------------------------------
-        # Firebase Web API key
-        # ------------------------------------------
+       
 
         if not FIREBASE_WEB_API_KEY:
             raise RuntimeError(
                 "FIREBASE_WEB_API_KEY is not configured."
             )
 
-        # ------------------------------------------
-        # Firebase Email/Password authentication
-        # ------------------------------------------
+        
 
         auth_url = (
             "https://identitytoolkit.googleapis.com/"
@@ -385,9 +347,7 @@ def login():
             f"{response.status_code}"
         )
 
-        # ------------------------------------------
-        # Authentication failed
-        # ------------------------------------------
+       
 
         if response.status_code != 200:
 
@@ -401,9 +361,7 @@ def login():
                 f"{response.status_code} - {response.text}"
             )
 
-        # ------------------------------------------
-        # Get Firebase authentication response
-        # ------------------------------------------
+       
 
         auth_data = response.json()
 
@@ -423,10 +381,7 @@ def login():
         print(f"[LOGIN DEBUG] Firebase UID: {uid}")
         print("[LOGIN DEBUG] Firebase password authentication SUCCESS")
 
-        # ------------------------------------------
-        # Verify Firebase ID token
-        # ------------------------------------------
-
+        
         print("[LOGIN DEBUG] Verifying Firebase ID token...")
 
         decoded_token = auth.verify_id_token(
@@ -438,9 +393,7 @@ def login():
 
         verified_uid = decoded_token["uid"]
 
-        # ------------------------------------------
-        # Verify UID
-        # ------------------------------------------
+        
 
         if verified_uid != uid:
             raise RuntimeError(
@@ -451,9 +404,7 @@ def login():
 
         print(f"[LOGIN DEBUG] Verified UID: {verified_uid}")
 
-        # ------------------------------------------
-        # Get Firebase user
-        # ------------------------------------------
+        
 
         user_record = auth.get_user(verified_uid)
 
@@ -462,10 +413,7 @@ def login():
             f"{user_record.email}"
         )
 
-        # ------------------------------------------
-        # Create Flask session
-        # ------------------------------------------
-
+       
         session.clear()
 
         session["user_id"] = verified_uid
@@ -711,6 +659,6 @@ def logout():
 if __name__ == "__main__":
 
     app.run(
-         host="0.0.0.0",
-        port=port
+        host="0.0.0.0",
+        port=PORT
     )
